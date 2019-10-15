@@ -1,0 +1,21 @@
+{
+    "name": "mfajfr/daktela-api",
+    "description": "API for communication with Daktela",
+    "type": "library",
+    "require": {
+        "php": "^7.1.3",
+        "guzzlehttp/guzzle": "^6.3",
+        "nesbot/carbon": "^2.23"
+    },
+    "autoload": {
+        "psr-4": {
+            "Daktela\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Ing. Marek Fajfr",
+            "email": "mfajfr90@gmail.com"
+        }
+    ]
+}
