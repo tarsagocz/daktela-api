@@ -10,10 +10,12 @@ use Carbon\Carbon;
 use Daktela\Models\Activity\ActivitableTrait;
 use Daktela\Models\Activity\Activity;
 use Daktela\Models\ActivityAny\ActivityAny;
+use Daktela\Models\CampaignRecord\CampaignRecord;
 use Daktela\Models\Contact\Contact;
 use Daktela\Models\FetchableTrait;
 use Daktela\Models\Queue\Queue;
 use Daktela\Models\ReadableTrait;
+use Daktela\Models\Status\Status;
 use Daktela\Models\Transcript\Transcript;
 use Daktela\Models\Transcript\TranscriptableTrait;
 use Daktela\Models\User\User;
@@ -182,51 +184,16 @@ class ActivityCall extends ActivityAny
             self::optionalProperty('pressed_key', $row), self::optionalProperty('missed_call', $row), self::isPropertyExist('missed_call_time', $row) ? new Carbon($row['missed_call_time']) : null,
             self::optionalProperty('attempts', $row), self::optionalProperty('score', $row), self::optionalProperty('note', $row));
 
-        if (self::isPropertyExist('options', $row)) {
+        if ($activity->isOptionable($row)) {
             $activity->setOptions($row['options']);
         }
 
-        if (is_array($row['id_queue'])) {
-            $activity->queue = Queue::createFromRow($row['id_queue']);
-        } else {
-            $activity->queue = $row['id_queue'];
-        }
-
-        if (is_array($row['id_agent'])) {
-            $activity->agent = User::createFromRow($row['id_agent']);
-        } else {
-            $activity->agent = $row['id_agent'];
-        }
-
-        if (is_array($row['contact'])) {
-            $activity->contact = Contact::createFromRow($row['contact']);
-        } else {
-            $activity->contact = $row['contact'];
-        }
-
-        if (is_array($row['activities'])) {
-            foreach ($row['activities'] as $a) {
-                $activity->activities[] = Activity::createFromRow($a);
-            }
-        } else {
-            $activity->activities = self::optionalProperty('activities', $row);
-        }
-
-        if (is_array($row['channels'])) {
-            foreach ($row['channels'] as $channel) {
-                $activity->channels[] = ActivityCallChannel::createFromRow($channel);
-            }
-        } else {
-            $activity->channels = $row['channels'];
-        }
-
-        if (is_array($row['transcripts'])) {
-            foreach ($row['transcripts'] as $transcript) {
-                $activity->transcripts[] = Transcript::createFromRow($transcript);
-            }
-        } else {
-            $activity->transcripts = $row['transcripts'];
-        }
+        self::setModel($row, 'id_queue', $activity, Queue::class, 'queue');
+        self::setModel($row, 'id_agent', $activity, User::class, 'agent');
+        self::setModel($row, 'contact', $activity, Contact::class);
+        self::setModels($row, 'activities', $activity, Activity::class);
+        self::setModels($row, 'channels', $activity, ActivityCallChannel::class);
+        self::setModels($row, 'transcripts', $activity, Transcript::class);
 
         return $activity;
     }

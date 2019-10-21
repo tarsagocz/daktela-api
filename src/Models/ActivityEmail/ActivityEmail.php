@@ -106,39 +106,11 @@ class ActivityEmail extends ActivityAny
             $activity->setOptions($row['options']);
         }
 
-        if (is_array($row['queue'])) {
-            $activity->queue = Queue::createFromRow($row['queue']);
-        } else {
-            $activity->queue = $row['queue'];
-        }
-
-        if (is_array($row['user'])) {
-            $activity->user = User::createFromRow($row['user']);
-        } else {
-            $activity->user = $row['user'];
-        }
-
-        if (is_array($row['contact'])) {
-            $activity->contact = Contact::createFromRow($row['contact']);
-        } else {
-            $activity->contact = $row['contact'];
-        }
-
-        if (is_array($row['activities'])) {
-            foreach ($row['activities'] as $a) {
-                $activity->activities[] = Activity::createFromRow($a);
-            }
-        } else {
-            $activity->activities = $row['activities'];
-        }
-
-        if (is_array($row['files'])) {
-            foreach ($row['files'] as $file) {
-                $activity->files[] = ActivityEmailFile::createFromRow($file);
-            }
-        } else {
-            $activity->files = $row['files'];
-        }
+        self::setModel($row, 'queue', $activity, Queue::class);
+        self::setModel($row, 'user', $activity, User::class);
+        self::setModel($row, 'contact', $activity, Contact::class);
+        self::setModel($row, 'activities', $activity, Activity::class);
+        self::setModel($row, 'files', $activity, ActivityEmailFile::class);
 
         return $activity;
     }

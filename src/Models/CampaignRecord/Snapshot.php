@@ -85,35 +85,11 @@ class Snapshot extends AbstractModel
     {
         $model = new self($row['title'], self::optionalProperty('number', $row), self::optionalProperty('nextcall', $row), self::optionalProperty('action', $row), self::optionalProperty('activity', $row), self::optionalProperty('call_id', $row), self::isPropertyExist('time', $row) ? new Carbon($row['time']) : null);
 
-        if (is_array($row['queue'])) {
-            $model->queue = Queue::createFromRow($row['queue']);
-        } else {
-            $model->queue = self::optionalProperty('queue', $row);
-        }
-
-        if (is_array($row['user'])) {
-            $model->user = User::createFromRow($row['user']);
-        } else {
-            $model->user = self::optionalProperty('user', $row);
-        }
-
-        if (is_array($row['created_by'])) {
-            $model->created_by = User::createFromRow($row['created_by']);
-        } else {
-            $model->created_by = self::optionalProperty('created_by', $row);
-        }
-
-        if (is_array($row['record'])) {
-            $model->record = CampaignRecord::createFromRow($row['record']);
-        } else {
-            $model->record = self::optionalProperty('record', $row);
-        }
-
-        if (is_array($row['statuses'])) {
-            foreach ($row['statuses'] as $key => $s) {
-                $model->statuses[] = Status::createFromRow($s);
-            }
-        }
+        self::setModel($row, 'queue', $model, Queue::class);
+        self::setModel($row, 'user', $model, User::class);
+        self::setModel($row, 'created_by', $model, User::class);
+        self::setModel($row, 'record', $model, CampaignRecord::class);
+        self::setModels($row, 'statuses', $model, Status::class);
 
         if (is_array($row['customFields'])) {
             foreach ($row['customFields'] as $key => $cf) {

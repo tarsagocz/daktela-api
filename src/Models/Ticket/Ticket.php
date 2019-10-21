@@ -178,16 +178,12 @@ class Ticket extends AbstractModel
      */
     public static function createFromRow(array $row): Ticket
     {
-//        var_dump($row);
         $ticket = new self(self::optionalProperty('name', $row), self::optionalProperty('title', $row), self::optionalProperty('email', $row), self::optionalProperty('isParent', $row), self::optionalProperty('description', $row), self::optionalProperty('stage', $row), self::optionalProperty('priority', $row), self::optionalProperty('sla_overdue', $row), self::isPropertyExist('sla_deadtime', $row) ? new Carbon($row['sla_deadtime']) : null, self::isPropertyExist('sla_change', $row) ? new Carbon($row['sla_change']) : null, self::optionalProperty('sla_duration', $row), self::optionalProperty('sla_custom', $row), self::optionalProperty('interaction_activity_count', $row), self::isPropertyExist('reopen', $row) ? new Carbon($row['reopen']) : null, self::isPropertyExist('created', $row) ? new Carbon($row['created']) : null, self::isPropertyExist('edited', $row) ? new Carbon($row['edited']) : null, self::isPropertyExist('first_answer', $row) ? new Carbon($row['first_answer']) : null, self::optionalProperty('first_answer_duration', $row), self::isPropertyExist('closed', $row) ? new Carbon($row['closed']) : null, self::optionalProperty('unread', $row), self::optionalProperty('has_attachment', $row));
-
-        if (self::isPropertyExist('category', $row)) {
-            $ticket->category = TicketCategory::createFromRow($row['category']);
-        }
-
-        if (self::isPropertyExist('options', $row)) {
+        if ($ticket->isOptionable($row)) {
             $ticket->setOptions($row['options']);
         }
+
+        self::setModel($row, 'category', $ticket, TicketCategory::class);
 
         return $ticket;
     }

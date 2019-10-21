@@ -8,6 +8,7 @@ namespace Daktela\Models\CampaignRecord;
 
 use Daktela\AbstractModel;
 use Daktela\Models\FetchableTrait;
+use Daktela\Models\Queue\Queue;
 use Daktela\Models\ReadableTrait;
 
 class CustomField extends AbstractModel

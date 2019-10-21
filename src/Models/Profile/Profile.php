@@ -92,7 +92,7 @@ class Profile extends AbstractModel
     public static function createFromRow($row)
     {
         $profile = new self(self::optionalProperty('name', $row), self::optionalProperty('title', $row), self::optionalProperty('description', $row), self::optionalProperty('maxActivities', $row), self::optionalProperty('maxOutRecords', $row), self::optionalProperty('deleteMissedActivity', $row), self::optionalProperty('noQueueCallsAllowed', $row));
-        if (self::isPropertyExist('options', $row)) {
+        if ($profile->isOptionable($row)) {
             $profile->setOptions($row['options']);
         }
         if (self::isPropertyExist('customViews', $row)) {

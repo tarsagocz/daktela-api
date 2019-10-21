@@ -77,11 +77,7 @@ class TicketCategory extends AbstractModel
     {
         $model = new self(self::optionalProperty('name', $row), $row['title'], self::optionalProperty('status_required', $row), self::optionalProperty('multiple_statuses', $row), self::optionalProperty('closeCheckChilds', $row));
 
-        if (is_array($row['sla'])) {
-            $model->sla = TicketSla::createFromRow($row['sla']);
-        } else {
-            $model->sla = $row['sla'];
-        }
+        self::setModel($row, 'sla', $model, TicketSla::class);
 
         return $model;
     }

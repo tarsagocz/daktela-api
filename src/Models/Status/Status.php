@@ -101,11 +101,7 @@ class Status extends AbstractModel
     {
         $model = new self(self::optionalProperty('name', $row), $row['title'], self::optionalProperty('description', $row), self::optionalProperty('blacklist_expiration_time', $row), self::optionalProperty('validation', $row), $row['nextcall'], self::optionalProperty('color', $row));
 
-        if (is_array($row['blacklist_database'])) {
-            $model->blacklistDatabase = BlacklistDatabase::createFromRow($row['blacklist_database']);
-        } else {
-            $model->blacklistDatabase = $row['blacklist_database'];
-        }
+        self::setModel($row, 'blacklist_database', $model, BlacklistDatabase::class, 'blacklistDatabase');
 
         return $model;
     }

@@ -108,35 +108,14 @@ class ActivityChat extends ActivityAny
     {
         $activity = new self(self::optionalProperty('name', $row), self::optionalProperty('title', $row), self::optionalProperty('email', $row), self::optionalProperty('phone', $row), self::optionalProperty('wait_time', $row), self::optionalProperty('duration', $row), self::optionalProperty('answered', $row), self::optionalProperty('disconnection', $row), self::isPropertyExist('time', $row) ? new Carbon($row['time']) : null, self::optionalProperty('missed', $row), self::isPropertyExist('missed_time', $row) ? new Carbon($row['missed_time']) : null);
 
-        if (self::isPropertyExist('options', $row)) {
+        if ($activity->isOptionable($row)) {
             $activity->setOptions($row['options']);
         }
 
-        if (is_array($row['queue'])) {
-            $activity->queue = Queue::createFromRow($row['queue']);
-        } else {
-            $activity->queue = $row['queue'];
-        }
-
-        if (is_array($row['user'])) {
-            $activity->user = User::createFromRow($row['user']);
-        } else {
-            $activity->user = $row['user'];
-        }
-
-        if (is_array($row['contact'])) {
-            $activity->contact = Contact::createFromRow($row['contact']);
-        } else {
-            $activity->contact = $row['contact'];
-        }
-
-        if (is_array($row['activities'])) {
-            foreach ($row['activities'] as $a) {
-                $activity->activities[] = Activity::createFromRow($a);
-            }
-        } else {
-            $activity->activities = $row['activities'];
-        }
+        self::setModel($row, 'queue', $activity, Queue::class);
+        self::setModel($row, 'user', $activity, User::class);
+        self::setModel($row, 'contact', $activity, Contact::class);
+        self::setModels($row, 'activities', $activity, Activity::class);
 
         return $activity;
     }

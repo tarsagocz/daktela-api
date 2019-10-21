@@ -14,6 +14,7 @@ use Daktela\Models\ActivityEmail\ActivityEmail;
 use Daktela\Models\ActivitySms\ActivitySms;
 use Daktela\Models\CampaignRecord\CampaignRecord;
 use Daktela\Models\Contact\Contact;
+use Daktela\Models\Database\Database;
 use Daktela\Models\FetchableTrait;
 use Daktela\Models\OptionableTrait;
 use Daktela\Models\Profile\ProfilableTrait;
@@ -165,37 +166,11 @@ class Activity extends ActivityAny
             $activity->setOptions($row['options']);
         }
 
-        if (is_array($row['queue'])) {
-            $activity->queue = Queue::createFromRow($row['queue']);
-        } else {
-            $activity->queue = $row['queue'];
-        }
-
-        if (is_array($row['user'])) {
-            $activity->user = User::createFromRow($row['user']);
-        } else {
-            $activity->user = $row['user'];
-        }
-
-        if (is_array($row['contact'])) {
-            $activity->contact = Contact::createFromRow($row['contact']);
-        } else {
-            $activity->contact = $row['contact'];
-        }
-
-        if (is_array($row['record'])) {
-            $activity->record = CampaignRecord::createFromRow($row['record']);
-        } else {
-            $activity->record = $row['record'];
-        }
-
-        if (is_array($row['statuses'])) {
-            foreach ($row['statuses'] as $status) {
-                $activity->statuses[] = Status::createFromRow($status);
-            }
-        } else {
-            $activity->contact = $row['statuses'];
-        }
+        self::setModel($row, 'queue', $activity, Queue::class);
+        self::setModel($row, 'user', $activity, User::class);
+        self::setModel($row, 'contact', $activity, Contact::class);
+        self::setModel($row, 'record', $activity, CampaignRecord::class);
+        self::setModels($row, 'statuses', $activity, Status::class);
 
         switch ($row['type']) {
             case ActivityTypeEnumeration::CALL:

@@ -105,23 +105,9 @@ class CampaignRecord extends AbstractModel
             $model->setOptions($row['options']);
         }
 
-        if (is_array($row['queue'])) {
-            $model->queue = Queue::createFromRow($row['queue']);
-        } else {
-            $model->queue = self::optionalProperty('queue', $row);
-        }
-
-        if (is_array($row['user'])) {
-            $model->user = User::createFromRow($row['user']);
-        } else {
-            $model->user = self::optionalProperty('user', $row);
-        }
-
-        if (is_array($row['database'])) {
-            $model->database = Database::createFromRow($row['database']);
-        } else {
-            $model->database = self::optionalProperty('database', $row);
-        }
+        self::setModel($row, 'queue', $model, Queue::class);
+        self::setModel($row, 'user', $model, User::class);
+        self::setModel($row, 'database', $model, Database::class);
 
         if (is_array($row['customFields'])) {
             foreach ($row['customFields'] as $key => $cf) {
@@ -179,5 +165,13 @@ class CampaignRecord extends AbstractModel
             'edited'   => $this->edited,
             'created'  => $this->created
         ];
+    }
+
+    /**
+     * @return array
+     */
+    public function getCustomFields(): array
+    {
+        return $this->customFields;
     }
 }

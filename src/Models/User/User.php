@@ -191,17 +191,12 @@ class User extends AbstractModel
     {
         $user = new self(self::optionalProperty('name', $row), $row['title'], self::optionalProperty('alias', $row), self::optionalProperty('nps_score', $row), self::optionalProperty('description', $row), self::optionalProperty('call_steering_description', $row), self::optionalProperty('password', $row), self::optionalProperty('extension', $row), self::optionalProperty('extension_state', $row), self::optionalProperty('clid', $row), self::optionalProperty('static', $row), self::optionalProperty('racordCalls', $row), self::optionalProperty('backofficeRinging', $row), self::optionalProperty('email', $row), self::optionalProperty('emailAuth', $row), self::optionalProperty('icon', $row), self::optionalProperty('emoji', $row), self::optionalProperty('backoffice_user', $row), self::optionalProperty('forwarding_number', $row), self::optionalProperty('deactived', $row), self::optionalProperty('deleted', $row));
 
-        if (self::isPropertyExist('options', $row)) {
+        if ($user->isOptionable($row)) {
             $user->setOptions($row['options']);
         }
 
-        if (self::isPropertyExist('profile', $row)) {
-            $user->profile = Profile::createFromRow($row['profile']);
-        }
-
-        if (self::isPropertyExist('role', $row)) {
-            $user->role = Profile::createFromRow($row['role']);
-        }
+        self::setModel($row, 'profile', $user, Profile::class);
+        self::setModel($row, 'role', $user, Role::class);
 
         return $user;
     }

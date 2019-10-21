@@ -86,11 +86,8 @@ class Template extends AbstractModel
     {
         $template = new self(self::optionalProperty('name', $row), $row['title'], self::optionalProperty('description', $row), self::optionalProperty('format', $row), $row['usingtype'], self::optionalProperty('subject', $row), self::optionalProperty('externalDataUrl', $row), self::optionalProperty('content', $row));
 
-        if (self::isPropertyExist('files', $row)) {
-            foreach ($row['files'] as $file) {
-                $template->files[] = File::createFromRow($file);
-            }
-        }
+        self::setModels($row, 'files', $template, File::class);
+
         return $template;
     }
 

@@ -9,10 +9,14 @@ namespace Daktela\Models\Queue;
 use Daktela\AbstractModel;
 use Daktela\Connection;
 use Daktela\Models\Blacklist\BlacklistDatabasableTrait;
+use Daktela\Models\CampaignRecord\CampaignRecordableTrait;
+use Daktela\Models\CampaignRecord\CustomFieldableTrait;
+use Daktela\Models\CampaignRecord\CustomFieldSchemableTrait;
 use Daktela\Models\FetchableTrait;
 use Daktela\Models\Group\GroupableTrait;
 use Daktela\Models\OptionableTrait;
 use Daktela\Models\Profile\ProfilableTrait;
+use Daktela\Models\QAForm\QAFormableTrait;
 use Daktela\Models\ReadableTrait;
 use Daktela\Models\Recording\Recording;
 use Daktela\Models\Status\Status;
@@ -31,6 +35,9 @@ class Queue extends AbstractModel
     use GroupableTrait;
     use BlacklistDatabasableTrait;
     use TemplatableTrait;
+    use QAFormableTrait;
+    use CampaignRecordableTrait;
+    use CustomFieldSchemableTrait;
     const MODEL = 'queues';
     /**
      * @var string Unique number of queue
@@ -64,7 +71,6 @@ class Queue extends AbstractModel
      * @var bool|null Flag if queue is deactivated
      */
     protected $deactivated;
-    protected $profiles = null;
 
     /**
      * Queue constructor.
@@ -96,7 +102,7 @@ class Queue extends AbstractModel
     public static function createFromRow($row) : Queue
     {
         $queue = new self($row['name'], self::isPropertyExist('title', $row) ? $row['title'] : null, self::isPropertyExist('alias', $row) ? $row['alias'] : null, self::isPropertyExist('description', $row) ? $row['description'] : null, self::isPropertyExist('call_steering_description', $row) ? $row['call_steering_description'] : null, $row['type'], self::isPropertyExist('direction', $row) ? $row['direction'] : null, self::isPropertyExist('deactivated', $row) ? $row['deactivated'] : null);
-        if (array_key_exists('options', $row)) {
+        if ($queue->isOptionable($row)) {
             $queue->setOptions($row['options']);
         }
 

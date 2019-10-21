@@ -64,11 +64,7 @@ class Database extends AbstractModel
     {
         $model = new self(self::optionalProperty('name', $row), $row['title'], self::optionalProperty('description', $row), self::optionalProperty('stage', $row), self::optionalProperty('deleted', $row));
 
-        if (is_array($row['queue'])) {
-            $model->queue = Queue::createFromRow($row['queue']);
-        } else {
-            $model->queue = self::optionalProperty('queue', $row);
-        }
+        self::setModel($row, 'queue', $model, Queue::class);
 
         return $model;
     }

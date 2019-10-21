@@ -63,7 +63,7 @@ class Role extends AbstractModel
     {
         $role = new self(self::optionalProperty('name', $row), $row['title'], self::optionalProperty('description', $row), self::isPropertyExist('shortcuts', $row) ? $row['shortcuts'] : []);
 
-        if (self::isPropertyExist('options', $row)) {
+        if ($role->isOptionable($row)) {
             $role->setOptions($row['options']);
         }
 
