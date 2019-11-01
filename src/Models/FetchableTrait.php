@@ -11,12 +11,12 @@ use Psr\Http\Message\ResponseInterface;
 
 trait FetchableTrait
 {
-    public static function fetch()
+    public static function fetch($params = [])
     {
         /**
          * @var ResponseInterface $response
          */
-        $response = Connection::get(self::MODEL . '.json');
+        $response = Connection::get(self::MODEL . '.json', $params);
         $rows = json_decode($response->getBody()->getContents(), true);
 
         if (!empty($rows['error'])) {

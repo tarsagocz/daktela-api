@@ -72,6 +72,7 @@ class Connection
 
     /**
      * @param $uri
+     * @param array $params
      * @return \Psr\Http\Message\ResponseInterface
      */
     public static function get($uri, $params = [])
