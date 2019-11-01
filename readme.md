@@ -1,5 +1,9 @@
 # Daktela API
 
+## Documentation
+
+[Daktela API](https://www.daktela.com/apihelp/v6/global/general-information)
+
 ## Legend
 
 :white_check_mark: ... Implemented 

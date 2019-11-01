@@ -173,8 +173,9 @@ class ActivityCall extends ActivityAny
     }
 
     /**
-     * @param array $row
+     * @param $row
      * @return ActivityCall
+     * @throws \Exception
      */
     public static function createFromRow($row): ActivityCall
     {
