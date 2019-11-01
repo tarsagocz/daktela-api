@@ -1,14 +1,22 @@
 # Daktela API
 
+## Legend
+
+:white_check_mark: ... Implemented 
+
+:x: ... Not implemented
+
+:no_entry_sign: ... Not available
+
 ## Models
 
 ### Basic methods
 
 Namespace       | Model                 | Fetch             | Create                | Read              | Update                | Delete
 --------------- | --------------------- | ----------------- | --------------------- | ----------------- | ------------------ | ------
-Account         | Account               | :white_check_mark: | :x: | :white_check_mark:
-  "             | AccountSnapshot       |       
-Activity        | Activity              | 
+Account         | Account               | :white_check_mark: | :x: | :white_check_mark: | :x: | :x: |
+  "             | AccountSnapshot       | :white_check_mark: | :no_entry_sign: | :white_check_mark: | :no_entry_sign: | :no_entry_sign:      
+Activity        | Activity              | :white_check_mark: | :x: | :white_check_mark: | :x: | :no_entry_sign: 
 ActivityCall    | ActivityCall          | :white_check_mark: | :x: | :white_check_mark: |  :no_entry_sign: | :no_entry_sign: 
   "             | ActivityCallChannel   | :white_check_mark: | :no_entry_sign: | :white_check_mark: | :no_entry_sign: | :no_entry_sign:
   "             | ActivityCallRecording | 
@@ -49,10 +57,4 @@ Transcript      | Transcript            | :white_check_mark: | :no_entry_sign: |
 User            | User                  |       |           |       |           |
   "             | UserOptionsFields     |       |           |       |           |
 Wallboard       | Wallboard             |       |           |       |           |
-
-`:white_check_mark: ... Implemented` 
-
-`:x: ... Not implemented`
-
-`:no_entry_sign: ... Not available`
  

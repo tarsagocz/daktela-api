@@ -15,13 +15,17 @@ class Connection
      */
     protected static $client = null;
     /**
-     * @var string
+     * @var Client|null
      */
-    protected static $subdomain;
+    protected static $baseClient = null;
     /**
      * @var string
      */
-    protected static $accessToken;
+    public static $subdomain;
+    /**
+     * @var string
+     */
+    public static $accessToken;
     /**
      * @var string
      */
@@ -46,6 +50,16 @@ class Connection
         self::$accessToken = $accessToken;
     }
 
+    public static function getBaseClient()
+    {
+        if (is_null(self::$baseClient)) {
+            self::$baseClient = new \GuzzleHttp\Client([
+                'base_uri' => 'https://' . self::$subdomain . '.daktela.com/'
+            ]);
+        }
+        return self::$baseClient;
+    }
+
     public static function getClient()
     {
         if (is_null(self::$client)) {
@@ -60,9 +74,9 @@ class Connection
      * @param $uri
      * @return \Psr\Http\Message\ResponseInterface
      */
-    public static function get($uri)
+    public static function get($uri, $params = [])
     {
-        return self::getClient()->get($uri . '?' . self::queryParams());
+        return self::getClient()->get($uri . '?' . self::queryParams($params));
     }
 
     public static function post($uri, $data)
@@ -71,11 +85,11 @@ class Connection
     }
 
     /**
+     * @param array $params
      * @return string
      */
-    public static function queryParams() : string
+    public static function queryParams($params = []) : string
     {
-        self::$params['accessToken'] = self::$accessToken;
-        return http_build_query(self::$params);
+        return http_build_query(['accessToken' => self::$accessToken] + $params);
     }
 }

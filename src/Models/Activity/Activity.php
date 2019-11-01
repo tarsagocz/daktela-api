@@ -7,6 +7,7 @@
 namespace Daktela\Models\Activity;
 
 use Carbon\Carbon;
+use Daktela\Connection;
 use Daktela\Models\ActivityAny\ActivityAny;
 use Daktela\Models\ActivityCall\ActivityCall;
 use Daktela\Models\ActivityChat\ActivityChat;
@@ -14,7 +15,6 @@ use Daktela\Models\ActivityEmail\ActivityEmail;
 use Daktela\Models\ActivitySms\ActivitySms;
 use Daktela\Models\CampaignRecord\CampaignRecord;
 use Daktela\Models\Contact\Contact;
-use Daktela\Models\Database\Database;
 use Daktela\Models\FetchableTrait;
 use Daktela\Models\OptionableTrait;
 use Daktela\Models\Profile\ProfilableTrait;
@@ -23,6 +23,7 @@ use Daktela\Models\ReadableTrait;
 use Daktela\Models\Status\Status;
 use Daktela\Models\Status\StatusableTrait;
 use Daktela\Models\User\User;
+use Psr\Http\Message\ResponseInterface;
 
 class Activity extends ActivityAny
 {
@@ -93,7 +94,6 @@ class Activity extends ActivityAny
      * @var int|null Duration of activity's ringing
      */
     protected $ringing_time;
-
 
     protected $queue = null;
     protected $user = null;
@@ -174,16 +174,16 @@ class Activity extends ActivityAny
 
         switch ($row['type']) {
             case ActivityTypeEnumeration::CALL:
-                $activity->item = ActivityCall::createFromRow($row['item']);
+                self::setModel($row, 'item', $activity, ActivityCall::class);
                 break;
             case ActivityTypeEnumeration::EMAIL:
-                $activity->item = ActivityEmail::createFromRow($row['item']);
+                self::setModel($row, 'item', $activity, ActivityEmail::class);
                 break;
             case ActivityTypeEnumeration::SMS:
-                $activity->item = ActivitySms::createFromRow($row['item']);
+                self::setModel($row, 'item', $activity, ActivitySms::class);
                 break;
             case ActivityTypeEnumeration::WEB_CHAT:
-                $activity->item = ActivityChat::createFromRow($row['item']);
+                self::setModel($row, 'item', $activity, ActivityChat::class);
 
         }
 
@@ -215,5 +215,29 @@ class Activity extends ActivityAny
         }
 
         return $this->contact;
+    }
+
+    /**
+     * @return \Psr\Http\Message\StreamInterface
+     */
+    public function recording()
+    {
+        /**
+         * @var ResponseInterface $response
+         */
+        $response = Connection::getBaseClient()->get('file/recording/' . $this->name . '?' . Connection::queryParams() . '&download', [
+            'curl' => [
+                CURLOPT_IGNORE_CONTENT_LENGTH => true
+            ]
+        ]);
+
+        return $response->getBody();
+//        $stream = fopen('test.wav', 'w');
+//        $body->seek(0);
+//        while (!$body->eof()) {
+//            $bytes = $body->read(1024);
+//            fputs($stream, $bytes);
+//        }
+//        fclose($stream);
     }
 }

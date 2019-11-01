@@ -176,7 +176,7 @@ class ActivityCall extends ActivityAny
      * @param array $row
      * @return ActivityCall
      */
-    public static function createFromRow(array $row): ActivityCall
+    public static function createFromRow($row): ActivityCall
     {
         $activity = new self(self::optionalProperty('id_call', $row), self::isPropertyExist('call_time', $row) ? new Carbon($row['call_time']) : null, self::optionalProperty('direction', $row), self::optionalProperty('answered', $row), self::optionalProperty('clid', $row), self::optionalProperty('prefix_clid_name', $row), self::optionalProperty('did', $row),
             self::optionalProperty('waiting_time', $row), self::optionalProperty('ringing_time', $row), self::optionalProperty('dialer_time', $row), self::optionalProperty('hold_time', $row),
