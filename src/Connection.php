@@ -7,6 +7,7 @@
 namespace Daktela;
 
 use GuzzleHttp\Client;
+use Psr\Http\Message\ResponseInterface;
 
 class Connection
 {
@@ -73,7 +74,7 @@ class Connection
     /**
      * @param $uri
      * @param array $params
-     * @return \Psr\Http\Message\ResponseInterface
+     * @return ResponseInterface
      */
     public static function get($uri, $params = [])
     {
