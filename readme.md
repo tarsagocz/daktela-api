@@ -4,6 +4,42 @@
 
 [Daktela API](https://www.daktela.com/apihelp/v6/global/general-information)
 
+## Installation
+```
+    composer require mfajfr/daktela-api
+```
+
+## Using
+
+### Connection
+```php
+define('API_KEY', 'xxxxx'); // API section in Daktela
+
+\Daktela\Connection::setSubDomain('example'); // Name of subdomain example.daktela.com
+\Daktela\Connection::setAccessToken(API_KEY);
+```
+
+### Fetch
+Loading group of records.
+
+```php
+    $rows = \Daktela\Models\ActivityCall\ActivityCall::fetch([
+        // paginating, sorting, filtering ...
+    ]);
+```
+
+### Read
+```php
+    $call = \Daktela\Models\ActivityCall\ActivityCall::read('nameOfActivityCall');
+```
+
+### Relations (HasMany)
+```php
+    $activity = \Daktela\Models\ActivityCall\Activity::read('nameOfActivity');
+    $activity->statuses($force = true|false) // If $false == true then reload data
+```
+
+
 ## Legend
 
 :white_check_mark: ... Implemented 
