@@ -29,11 +29,13 @@ Loading group of records.
 ```
 
 ### Read
+Loading specific record
 ```php
     $call = \Daktela\Models\ActivityCall\ActivityCall::read('nameOfActivityCall');
 ```
 
 ### Relations (HasMany)
+Loading records related to one record
 ```php
     $activity = \Daktela\Models\ActivityCall\Activity::read('nameOfActivity');
     $activity->statuses($force = true|false) // If $false == true then reload data
