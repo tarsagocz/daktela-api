@@ -12,17 +12,19 @@ use Psr\Http\Message\ResponseInterface;
 trait ContactableTrait
 {
     protected $contacts = null;
+
     /**
+     * @param array $params
      * @param bool $force
      * @return null
      */
-    public function contacts($force = false)
+    public function contacts($params = [], $force = false)
     {
         if ($force || is_null($this->contacts)) {
             /**
              * @var ResponseInterface $response
              */
-            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . Contact::MODEL . '.json');
+            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . Contact::MODEL . '.json', $params);
             $rows = json_decode($response->getBody()
                 ->getContents(), true);
 

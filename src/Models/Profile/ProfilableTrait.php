@@ -12,17 +12,19 @@ use Psr\Http\Message\ResponseInterface;
 trait ProfilableTrait
 {
     protected $profiles = null;
+
     /**
+     * @param array $params
      * @param bool $force
      * @return null
      */
-    public function profiles($force = false)
+    public function profiles($params = [], $force = false)
     {
         if ($force || is_null($this->profiles)) {
             /**
              * @var ResponseInterface $response
              */
-            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . Profile::MODEL . '.json');
+            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . Profile::MODEL . '.json', $params);
             $rows = json_decode($response->getBody()
                 ->getContents(), true);
 

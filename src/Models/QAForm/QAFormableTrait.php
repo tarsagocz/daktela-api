@@ -12,18 +12,20 @@ use Psr\Http\Message\ResponseInterface;
 trait QAFormableTrait
 {
     protected $qaforms = null;
+
     /**
      *
+     * @param array $params
      * @param bool $force
      * @return QAForm[]
      */
-    public function qaforms($force = false)
+    public function qaforms($params = [], $force = false)
     {
         if ($force || is_null($this->qaforms)) {
             /**
              * @var ResponseInterface $response
              */
-            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . QAForm::MODEL . '.json');
+            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . QAForm::MODEL . '.json', $params);
             $rows = json_decode($response->getBody()
                 ->getContents(), true);
 

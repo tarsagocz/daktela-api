@@ -12,19 +12,21 @@ use Psr\Http\Message\ResponseInterface;
 trait QueuableTrait
 {
     protected $queues = null;
+
     /**
      * TODO
      *
+     * @param array $params
      * @param bool $force
      * @return null
      */
-    public function queues($force = false)
+    public function queues($params = [], $force = false)
     {
         if ($force || is_null($this->queues)) {
             /**
              * @var ResponseInterface $response
              */
-            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . Queue::MODEL . '.json');
+            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . Queue::MODEL . '.json', $params);
             $rows = json_decode($response->getBody()
                 ->getContents(), true);
 

@@ -12,18 +12,20 @@ use Psr\Http\Message\ResponseInterface;
 trait EventableTrait
 {
     protected $events = null;
+
     /**
      *
+     * @param array $params
      * @param bool $force
      * @return null
      */
-    public function events($force = false)
+    public function events($params = [], $force = false)
     {
         if ($force || is_null($this->events)) {
             /**
              * @var ResponseInterface $response
              */
-            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . Event::MODEL .'.json');
+            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . Event::MODEL .'.json', $params);
             $rows = json_decode($response->getBody()
                 ->getContents(), true);
 

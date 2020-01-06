@@ -12,18 +12,20 @@ use Psr\Http\Message\ResponseInterface;
 trait ActivityCallChannelableTrait
 {
     protected $channels = null;
+
     /**
      *
+     * @param array $params
      * @param bool $force
      * @return ActivityCallChannel[]
      */
-    public function channels($force = false)
+    public function channels($params = [], $force = false)
     {
         if ($force || is_null($this->channels)) {
             /**
              * @var ResponseInterface $response
              */
-            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . Ac::MODEL . '.json');
+            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . Ac::MODEL . '.json', $params);
             $rows = json_decode($response->getBody()
                 ->getContents(), true);
 

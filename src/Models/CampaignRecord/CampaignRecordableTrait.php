@@ -12,18 +12,20 @@ use Psr\Http\Message\ResponseInterface;
 trait CampaignRecordableTrait
 {
     protected $campaignrecords = null;
+
     /**
      *
+     * @param array $params
      * @param bool $force
      * @return CampaignRecord[]
      */
-    public function campaignrecords($force = false)
+    public function campaignrecords($params = [], $force = false)
     {
         if ($force || is_null($this->campaignrecords)) {
             /**
              * @var ResponseInterface $response
              */
-            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . strtolower(CampaignRecord::MODEL) . '.json');
+            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . strtolower(CampaignRecord::MODEL) . '.json', $params);
             $rows = json_decode($response->getBody()
                 ->getContents(), true);
 

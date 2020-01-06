@@ -12,18 +12,20 @@ use Psr\Http\Message\ResponseInterface;
 trait CustomFieldSchemableTrait
 {
     protected $schemes = null;
+
     /**
      *
+     * @param array $params
      * @param bool $force
      * @return CustomField[]
      */
-    public function schemes($force = false)
+    public function schemes($params = [], $force = false)
     {
         if ($force || is_null($this->schemes)) {
             /**
              * @var ResponseInterface $response
              */
-            $response = Connection::get(self::MODEL . '/' . $this->name . '/scheme.json');
+            $response = Connection::get(self::MODEL . '/' . $this->name . '/scheme.json', $params);
             $rows = json_decode($response->getBody()
                 ->getContents(), true);
 

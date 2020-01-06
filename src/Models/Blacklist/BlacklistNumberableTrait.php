@@ -12,18 +12,20 @@ use Psr\Http\Message\ResponseInterface;
 trait BlacklistNumberableTrait
 {
     protected $numbers = null;
+
     /**
      *
+     * @param array $params
      * @param bool $force
      * @return null
      */
-    public function numbers($force = false)
+    public function numbers($params = [], $force = false)
     {
         if ($force || is_null($this->numbers)) {
             /**
              * @var ResponseInterface $response
              */
-            $response = Connection::get(self::MODEL . '/' . $this->name . '/numbers.json');
+            $response = Connection::get(self::MODEL . '/' . $this->name . '/numbers.json', $params);
             $rows = json_decode($response->getBody()
                 ->getContents(), true);
 

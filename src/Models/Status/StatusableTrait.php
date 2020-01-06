@@ -12,18 +12,19 @@ use Psr\Http\Message\ResponseInterface;
 trait StatusableTrait
 {
     protected $statuses = null;
+
     /**
-     *
+     * @param array $params
      * @param bool $force
-     * @return Status[]
+     * @return array|null
      */
-    public function statuses($force = false)
+    public function statuses($params = [], $force = false)
     {
         if ($force || is_null($this->statuses)) {
             /**
              * @var ResponseInterface $response
              */
-            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . Status::MODEL . '.json');
+            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . Status::MODEL . '.json', $params);
             $rows = json_decode($response->getBody()
                 ->getContents(), true);
 

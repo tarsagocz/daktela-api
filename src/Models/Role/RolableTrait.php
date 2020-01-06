@@ -17,13 +17,13 @@ trait RolableTrait
      * @param bool $force
      * @return null
      */
-    public function roles($force = false)
+    public function roles($params = [], $force = false)
     {
         if ($force || is_null($this->roles)) {
             /**
              * @var ResponseInterface $response
              */
-            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . Role::MODEL . '.json');
+            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . Role::MODEL . '.json', $params);
             $rows = json_decode($response->getBody()
                 ->getContents(), true);
 

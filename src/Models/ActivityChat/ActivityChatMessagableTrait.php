@@ -12,18 +12,20 @@ use Psr\Http\Message\ResponseInterface;
 trait ActivityChatMessagableTrait
 {
     protected $messages = null;
+
     /**
      *
+     * @param array $params
      * @param bool $force
      * @return ActivityChatMessage[]
      */
-    public function messages($force = false)
+    public function messages($params = [], $force = false)
     {
         if ($force || is_null($this->messages)) {
             /**
              * @var ResponseInterface $response
              */
-            $response = Connection::get(self::MODEL . '/' . $this->name . '/messages.json');
+            $response = Connection::get(self::MODEL . '/' . $this->name . '/messages.json', $params);
             $rows = json_decode($response->getBody()
                 ->getContents(), true);
 

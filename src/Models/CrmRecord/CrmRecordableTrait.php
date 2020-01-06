@@ -12,17 +12,19 @@ use Psr\Http\Message\ResponseInterface;
 trait CrmRecordableTrait
 {
     protected $records = null;
+
     /**
+     * @param array $params
      * @param bool $force
      * @return null
      */
-    public function records($force = false)
+    public function records($params = [], $force = false)
     {
         if ($force || is_null($this->records)) {
             /**
              * @var ResponseInterface $response
              */
-            $response = Connection::get(self::MODEL . '/' . $this->name . '/records.json');
+            $response = Connection::get(self::MODEL . '/' . $this->name . '/records.json', $params);
             $rows = json_decode($response->getBody()
                 ->getContents(), true);
 

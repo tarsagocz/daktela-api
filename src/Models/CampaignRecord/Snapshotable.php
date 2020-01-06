@@ -12,18 +12,20 @@ use Psr\Http\Message\ResponseInterface;
 trait Snapshotable
 {
     protected $snapshots = null;
+
     /**
      *
+     * @param array $params
      * @param bool $force
      * @return null
      */
-    public function snapshots($force = false)
+    public function snapshots($params = [], $force = false)
     {
         if ($force || is_null($this->snapshots)) {
             /**
              * @var ResponseInterface $response
              */
-            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . Snapshot::MODEL . '.json');
+            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . Snapshot::MODEL . '.json', $params);
             $rows = json_decode($response->getBody()
                 ->getContents(), true);
 

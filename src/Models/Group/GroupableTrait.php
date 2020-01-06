@@ -15,16 +15,17 @@ trait GroupableTrait
 
     /**
      *
+     * @param array $params
      * @param bool $force
      * @return null
      */
-    public function groups($force = false)
+    public function groups($params = [], $force = false)
     {
         if ($force || is_null($this->groups)) {
             /**
              * @var ResponseInterface $response
              */
-            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . Group::MODEL . '.json');
+            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . Group::MODEL . '.json', $params);
             $rows = json_decode($response->getBody()
                 ->getContents(), true);
 

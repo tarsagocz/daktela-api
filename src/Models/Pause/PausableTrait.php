@@ -12,17 +12,19 @@ use Psr\Http\Message\ResponseInterface;
 trait PausableTrait
 {
     protected $pauses = null;
+
     /**
+     * @param array $params
      * @param bool $force
      * @return null
      */
-    public function pauses($force = false)
+    public function pauses($params = [], $force = false)
     {
         if ($force || is_null($this->pauses)) {
             /**
              * @var ResponseInterface $response
              */
-            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . Pause::MODEL . '.json');
+            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . Pause::MODEL . '.json', $params);
             $rows = json_decode($response->getBody()
                 ->getContents(), true);
 

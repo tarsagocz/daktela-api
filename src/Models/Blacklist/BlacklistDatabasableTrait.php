@@ -12,18 +12,20 @@ use Psr\Http\Message\ResponseInterface;
 trait BlacklistDatabasableTrait
 {
     protected $blacklist_databases = null;
+
     /**
      *
+     * @param array $params
      * @param bool $force
      * @return null
      */
-    public function blacklist_databases($force = false)
+    public function blacklist_databases($params = [], $force = false)
     {
         if ($force || is_null($this->blacklist_databases)) {
             /**
              * @var ResponseInterface $response
              */
-            $response = Connection::get(self::MODEL . '/' . $this->name . '/blacklistDatabases.json');
+            $response = Connection::get(self::MODEL . '/' . $this->name . '/blacklistDatabases.json', $params);
             $rows = json_decode($response->getBody()
                 ->getContents(), true);
 

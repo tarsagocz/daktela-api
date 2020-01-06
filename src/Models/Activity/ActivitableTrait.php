@@ -12,18 +12,20 @@ use Psr\Http\Message\ResponseInterface;
 trait ActivitableTrait
 {
     protected $activities = null;
+
     /**
      *
+     * @param array $params
      * @param bool $force
      * @return Activity[]
      */
-    public function activities($force = false)
+    public function activities($params = [], $force = false)
     {
         if ($force || is_null($this->activities)) {
             /**
              * @var ResponseInterface $response
              */
-            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . Activity::MODEL . '.json');
+            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . Activity::MODEL . '.json', $params);
             $rows = json_decode($response->getBody()
                 ->getContents(), true);
 

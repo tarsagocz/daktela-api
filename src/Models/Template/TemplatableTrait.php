@@ -12,18 +12,20 @@ use Psr\Http\Message\ResponseInterface;
 trait TemplatableTrait
 {
     protected $templates = null;
+
     /**
      *
+     * @param array $params
      * @param bool $force
      * @return null
      */
-    public function templates($force = false)
+    public function templates($params = [], $force = false)
     {
         if ($force || is_null($this->templates)) {
             /**
              * @var ResponseInterface $response
              */
-            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . Template::MODEL . '.json');
+            $response = Connection::get(self::MODEL . '/' . $this->name . '/' . Template::MODEL . '.json', $params);
             $rows = json_decode($response->getBody()
                 ->getContents(), true);
 
